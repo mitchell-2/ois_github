@@ -6,8 +6,14 @@ data_boek <- subset(ois_data, `Methode?` == "boek")
 data_gpt <- subset(ois_data, `Methode?` == "ProgrammeerGPT")
 
 # creëren boxplots SUS waarden
-boxplot(data_gpt$`SUS score`, main='titel', ylab='waarden')
-boxplot(data_boek$`SUS score`, main='titel', ylab='waarden')
+sus_scores <- data.frame(
+  leermethode = rep(c("ProgrammeerGPT", "Boek"), each = length(data_gpt$`SUS score`)),
+  SUS = c(data_gpt$`SUS score`, data_boek$`SUS score`)
+)
+
+boxplot(SUS ~ leermethode, data = sus_scores, 
+        col = 'lightyellow',border = "black",
+        xlab = "Conditie (Leermethode)", ylab = "SUS score") 
 
 # uitvoeren Welch Two Sample t-test
 t.test(data_boek$`SUS score`,data_gpt$`SUS score`,var.equal=FALSE)
